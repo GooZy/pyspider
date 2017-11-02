@@ -1,4 +1,8 @@
-## Pyspider 源码阅读/笔记/注释
+## pyspider 源码阅读/注释
+
+个人学习用
+
+------
 
 pyspider [![Build Status]][Travis CI] [![Coverage Status]][Coverage] [![Try]][Demo]
 ========
