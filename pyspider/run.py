@@ -8,7 +8,7 @@
 
 import os
 import sys
-import six
+import six  # 使代码兼容py2和py3
 import copy
 import time
 import shutil
@@ -33,7 +33,7 @@ def read_config(ctx, param, value):
         return dict((k.replace('-', '_'), underline_dict(v)) for k, v in six.iteritems(d))
 
     config = underline_dict(json.load(value))
-    ctx.default_map = config
+    ctx.default_map = config  # 使用default_map会覆盖默认的配置，参见：http://click.pocoo.org/4/commands/
     return config
 
 
