@@ -47,7 +47,7 @@ def connect_database(url):
 
 
 def _connect_database(url):  # NOQA
-    parsed = urlparse(url)
+    parsed = urlparse(url)  # 原来urlparse可以返回这么多东西= =，username，password，hostname，port竟然都行
 
     scheme = parsed.scheme.split('+')
     if len(scheme) == 1:

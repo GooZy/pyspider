@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 # vim: set et sw=4 ts=4 sts=4 ff=unix fenc=utf8:
+# et 编辑时将所有Tab 替换为空格; sw 每层缩进的空格数；ts 一个tab字符占多少个空格；
+# sts 方便在开启了et后使用退格（backspace）键，每次退格将删除X个空格；ff 文件格式；fenc 文件编码；
 # Author: Binux<i@binux.me>
 #         http://binux.me
 # Created on 2014-03-05 00:11:49
@@ -58,7 +60,7 @@ def connect_rpc(ctx, param, value):
         import xmlrpclib as xmlrpc_client
     return xmlrpc_client.ServerProxy(value, allow_none=True)
 
-
+# is_flag 参考：http://click.pocoo.org/5/options/ 大概就是有斜杠的参数自动会识别出是布尔选项，没斜杠的，可以通过is_flag来认定是
 @click.group(invoke_without_command=True)
 @click.option('-c', '--config', callback=read_config, type=click.File('r'),
               help='a json file with default values for subcommands. {"webui": {"port":5001}}')
@@ -381,7 +383,7 @@ def webui(ctx, host, port, cdn, scheduler_rpc, fetcher_rpc, max_rate, max_burst,
     if g.get('testing_mode') or get_object:
         return app
 
-    app.run(host=host, port=port)
+    app.run(host=host, port=port)  # 调用webui/app.run
 
 
 @cli.command()
