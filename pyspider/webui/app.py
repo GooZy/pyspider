@@ -16,7 +16,7 @@ from six.moves.urllib.parse import urljoin
 from flask import Flask
 from pyspider.fetcher import tornado_fetcher
 
-if os.name == 'nt':
+if os.name == 'nt':  # 平台判定 nt windows，posix linux
     import mimetypes
     mimetypes.add_type("text/css", ".css", True)
 
@@ -51,6 +51,8 @@ class QuitableFlask(Flask):
         use_reloader = self.debug
         use_debugger = self.debug
 
+        # 使用werkzeug可以解决uWSGI下debug flask的问题
+        # https://codeseekah.com/2012/10/28/dubugging-flask-applications-under-uwsgi/
         if use_debugger:
             from werkzeug.debug import DebuggedApplication
             application = DebuggedApplication(application, True)
@@ -87,7 +89,7 @@ class QuitableFlask(Flask):
 app = QuitableFlask('webui',
                     static_folder=os.path.join(os.path.dirname(__file__), 'static'),
                     template_folder=os.path.join(os.path.dirname(__file__), 'templates'))
-app.secret_key = os.urandom(24)
+app.secret_key = os.urandom(24)  # 生成足够不错的随机秘钥
 app.jinja_env.line_statement_prefix = '#'
 app.jinja_env.globals.update(builtins.__dict__)
 

@@ -383,7 +383,7 @@ def webui(ctx, host, port, cdn, scheduler_rpc, fetcher_rpc, max_rate, max_burst,
     if g.get('testing_mode') or get_object:
         return app
 
-    app.run(host=host, port=port)  # 调用webui/app.run
+    app.run(host=host, port=port)  # 调用webui/app.run，这里应该就是整个项目的启动所在
 
 
 @cli.command()
