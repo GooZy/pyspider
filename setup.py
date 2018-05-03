@@ -8,7 +8,7 @@
 
 import sys
 from setuptools import setup, find_packages
-from codecs import open
+from codecs import open  # 可以指定编码格式
 from os import path
 
 here = path.abspath(path.dirname(__file__))
