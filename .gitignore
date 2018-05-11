@@ -1,6 +1,6 @@
 *.py[cod]
 data/*
-
+pyspider/data/
 # C extensions
 *.so
 

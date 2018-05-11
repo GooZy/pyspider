@@ -404,7 +404,7 @@ class Fetcher(object):
 
             result = {}
             result['orig_url'] = url
-            result['content'] = response.body or ''
+            result['content'] = response.body or ''  # type: bytes. http://www.tornadoweb.org/en/stable/httpclient.html#response-objects
             result['headers'] = dict(response.headers)
             result['status_code'] = response.code
             result['url'] = response.effective_url or url
@@ -527,7 +527,7 @@ class Fetcher(object):
 
     @gen.coroutine
     def splash_fetch(self, url, task):
-        '''Fetch with splash'''
+        '''Fetch with splash  介绍：https://cuiqingcai.com/5638.html'''
         start_time = time.time()
         self.on_fetch('splash', task)
         handle_error = lambda x: self.handle_error('splash', url, task, start_time, x)

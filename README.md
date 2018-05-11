@@ -31,3 +31,21 @@
 - Processor：解析页面内容交由Scheduler/Result Worker
 - Result Worker：结果处理，默认在resultdb
 
+
+### 流程
+
+- 启动phantomjs
+- 启动result worker，使用队列process2result，监听process返回的结果，入库
+- 启动processor
+  1. 从fetcher2processor取task和response
+  2. 调用callback对应的函数处理response(**参见pyspider.libs.base_handler.py:176**)，将处理结果放入processor2result，将运行状态放入status_queue，如果有后续任务，放入newtask_queue
+- 启动fetcher
+  1. 从scheduler2fetcher取出task，获得url，决定用什么抓取（http、data入库、phantomjs、splash，**参见pyspider.fetcher.tornado_fetcher.py:132**），结果(task, result)入fetcher2processor
+- 启动scheduler
+  1. 从projectdb拿到active(running or debuging)的project，通过project从taskdb拿到task放入project.task_queue
+  2. 对_on_get_info的task进行更新
+  3. 将首任务on_cronjob放入scheduler2fetcher
+  4. 将结束任务on_finished和其它任务放入scheduler2fetcher
+  5. 检查已经标为删除的任务，将其删除
+  6. 每60s，保存计数器到文件
+- 启动webUI
