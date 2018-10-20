@@ -144,6 +144,7 @@ def cli(ctx, **kwargs):
     elif kwargs.get('beanstalk'):
         kwargs['message_queue'] = "beanstalk://%s/" % kwargs['beanstalk']
 
+    # 建立对应的消息队列
     for name in ('newtask_queue', 'status_queue', 'scheduler2fetcher',
                  'fetcher2processor', 'processor2result'):
         if kwargs.get('message_queue'):
@@ -403,6 +404,7 @@ def phantomjs(ctx, phantomjs_path, port, auto_restart, args):
     _quit = []
     phantomjs_fetcher = os.path.join(
         os.path.dirname(pyspider.__file__), 'fetcher/phantomjs_fetcher.js')
+    # Command-line Options: http://phantomjs.org/api/command-line.html
     cmd = [phantomjs_path,
            # this may cause memory leak: https://github.com/ariya/phantomjs/issues/12903
            #'--load-images=false',

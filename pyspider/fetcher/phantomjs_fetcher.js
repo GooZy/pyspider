@@ -5,15 +5,15 @@
 
 var port, server, service,
   wait_before_end = 1000,
-  system = require('system'),
-  webpage = require('webpage');
+  system = require('system'),  // 引入模块
+  webpage = require('webpage');  // 处理具体页面的模块：https://www.ctolib.com/docs-PhantomJS-c-149005.html
 
 if (system.args.length !== 2) {
   console.log('Usage: simpleserver.js <portnumber>');
   phantom.exit(1);
 } else {
   port = system.args[1];
-  server = require('webserver').create();
+  server = require('webserver').create();  // https://www.ctolib.com/docs-PhantomJS-c-149009.html
   console.debug = function(){};
 
   service = server.listen(port, {
@@ -60,7 +60,7 @@ if (system.args.length !== 2) {
     page.viewportSize = {
       width: fetch.js_viewport_width || 1024,
       height: fetch.js_viewport_height || 768*3
-    }
+    };
     if (fetch.headers) {
       fetch.headers['Accept-Encoding'] = undefined;
       fetch.headers['Connection'] = undefined;
@@ -109,7 +109,7 @@ if (system.args.length !== 2) {
         end_time = Date.now() + wait_before_end;
         setTimeout(make_result, wait_before_end+10, page);
       }
-    }
+    };
     page.onResourceError = page.onResourceTimeout=function(response) {
       console.info("Request error: #"+response.id+" ["+response.errorCode+"="+response.errorString+"]"+response.url);
       if (first_response === null) {
@@ -128,7 +128,7 @@ if (system.args.length !== 2) {
     // send request
     page.open(fetch.url, {
       operation: fetch.method,
-      data: fetch.data,
+      data: fetch.data
     });
 
     // make response
@@ -137,7 +137,7 @@ if (system.args.length !== 2) {
         return;
       }
       if (Date.now() - start_time < page.settings.resourceTimeout) {
-        if (!!!end_time) {
+        if (!end_time) {
           return;
         }
         if (end_time > Date.now()) {
@@ -170,7 +170,7 @@ if (system.args.length !== 2) {
       var body = JSON.stringify(result, null, 2);
       response.writeHead(200, {
         'Cache': 'no-cache',
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       });
       response.write(body);
       response.closeGracefully();

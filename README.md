@@ -24,7 +24,7 @@
 |____tox.ini
 ```
 
-#### 四大组件：scheduler、fetcher、processor、result worker
+### 四大组件：scheduler、fetcher、processor、result worker
 
 - Scheduler：任务调度（是否是新任务，是否需要重跑）
 - Fetcher：获取页面内容，交由Processor处理
@@ -32,7 +32,7 @@
 - Result Worker：结果处理，默认在resultdb
 
 
-### 流程
+## 流程
 
 - 启动phantomjs
 - 启动result worker，使用队列process2result，监听process返回的结果，入库
@@ -49,3 +49,19 @@
   5. 检查已经标为删除的任务，将其删除
   6. 每60s，保存计数器到文件
 - 启动webUI
+
+## 详细
+
+### 1. Phantomjs
+
+官方文档：http://phantomjs.org/documentation/
+
+调用`phantomjs_fetcher.js`进行页面解析，其中主要用了phantomjs自带的webpage和webserver模块
+
+- *refer*
+  1. [PhantomJS](http://javascript.ruanyifeng.com/tool/phantomjs.html)
+  2. [简介,phantomjs,中文,文教,教程,Node.js开发社区 ](https://www.ctolib.com/docs-PhantomJS-c-index.html)
+
+### 2. Result worker
+
+
