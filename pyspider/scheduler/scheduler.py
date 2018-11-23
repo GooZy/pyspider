@@ -110,10 +110,15 @@ class Project(object):
         self.updatetime = project_info['updatetime']
 
         md5sum = utils.md5string(project_info['script'])
-        if (self.md5sum != md5sum or self.waiting_get_info) and self.active:
-            self._send_on_get_info = True
+        # if (self.md5sum != md5sum or self.waiting_get_info) and self.active:
+        #     self._send_on_get_info = True
+        #     self.waiting_get_info = True
+        # self.md5sum = md5sum
+        if self.md5sum != md5sum:
             self.waiting_get_info = True
-        self.md5sum = md5sum
+            self.md5sum = md5sum
+        if self.waiting_get_info and self.active:
+            self._send_on_get_info = True
 
         if self.active:
             self.task_queue.rate = project_info['rate']
@@ -205,11 +210,13 @@ class Scheduler(object):
     def _update_projects(self):
         '''Check project update'''
         now = time.time()
+        # 非强制更新情况下，两次更新间隔至少5分钟
         if (
                 not self._force_update_project
                 and self._last_update_project + self.UPDATE_PROJECT_INTERVAL > now
         ):
             return
+        # 更新最新更新时间大于上次更新时间的项目
         for project in self.projectdb.check_update(self._last_update_project):
             self._update_project(project)
             logger.debug("project: %s updated.", project['name'])
@@ -227,6 +234,7 @@ class Scheduler(object):
 
         project = self.projects[project['name']]
 
+        # 代码更新时会触发重载项目
         if project._send_on_get_info:
             # update project runtime info from processor by sending a _on_get_info
             # request, result is in status_page.track.save
@@ -279,6 +287,9 @@ class Scheduler(object):
         self._cnt['all'].value((project.name, 'pending'), len(project.task_queue))
 
     def _update_project_cnt(self, project_name):
+        """
+        更新项目状态计数
+        """
         status_count = self.taskdb.status_count(project_name)
         self._cnt['all'].value(
             (project_name, 'success'),
@@ -490,6 +501,7 @@ class Scheduler(object):
 
             # task queue
             task_queue = project.task_queue
+            # 取出所有到目前可以执行的任务
             task_queue.check_update()
             project_cnt = 0
 
@@ -973,6 +985,7 @@ class Scheduler(object):
 
         # lazy join project.crawl_config
         if getattr(project_info, 'crawl_config', None):
+            # 装配抓取选项和回调函数
             task = BaseHandler.task_join_crawl_config(task, project_info.crawl_config)
 
         project_info.active_tasks.appendleft((time.time(), task))

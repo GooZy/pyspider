@@ -340,8 +340,8 @@ class ObjectDict(dict):
     """
 
     def __getattr__(self, name):
-        ret = self.__getitem__(name)
-        if hasattr(ret, '__get__'):
+        ret = self.__getitem__(name)  # 当一个条目被访问时，使用符号 self[key]
+        if hasattr(ret, '__get__'):  # 如果ret是个定义了__get__方法的对象，通过__get__获取其值
             return ret.__get__(self, ObjectDict)
         return ret
 
