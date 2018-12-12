@@ -659,7 +659,7 @@ class Fetcher(object):
                     logger.exception(e)
                     break
 
-        tornado.ioloop.PeriodicCallback(queue_loop, 100, io_loop=self.ioloop).start()
+        tornado.ioloop.PeriodicCallback(queue_loop, 100, io_loop=self.ioloop).start()  # milliseconds
         tornado.ioloop.PeriodicCallback(self.clear_robot_txt_cache, 10000, io_loop=self.ioloop).start()
         self._running = True
 
