@@ -165,7 +165,7 @@ class ProjectLoader(object):
 
     def load_module(self, fullname):
         if self.mod is None:
-            self.mod = mod = imp.new_module(fullname)
+            self.mod = mod = imp.new_module(fullname)  # Return a new empty module object called fullname.
         else:
             mod = self.mod
         mod.__file__ = '<%s>' % self.name
@@ -175,7 +175,7 @@ class ProjectLoader(object):
         code = self.get_code(fullname)
         six.exec_(code, mod.__dict__)
         linecache.clearcache()
-        if sys.version_info[:2] == (3, 3):
+        if sys.version_info[:2] == (3, 3):  # python 3.3
             sys.modules[fullname] = mod
         return mod
 
@@ -183,6 +183,7 @@ class ProjectLoader(object):
         return False
 
     def get_code(self, fullname):
+        # Compile source into a code object that can be executed by exec() or eval()
         return compile(self.get_source(fullname), '<%s>' % self.name, 'exec')
 
     def get_source(self, fullname):

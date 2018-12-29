@@ -109,7 +109,7 @@ class Processor(object):
             project = task['project']
             updatetime = task.get('project_updatetime', None)
             md5sum = task.get('project_md5sum', None)
-            project_data = self.project_manager.get(project, updatetime, md5sum)
+            project_data = self.project_manager.get(project, updatetime, md5sum)  # 加载项目脚本
             assert project_data, "no such project!"
             if project_data.get('exception'):
                 ret = ProcessorResult(logs=(project_data.get('exception_log'), ),
@@ -212,7 +212,7 @@ class Processor(object):
 
         while not self._quit:
             try:
-                task, response = self.inqueue.get(timeout=1)
+                task, response = self.inqueue.get(timeout=1)  # (task, result<dict>)
                 self.on_task(task, response)
                 self._exceptions = 0
             except Queue.Empty as e:

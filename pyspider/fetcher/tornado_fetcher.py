@@ -407,7 +407,7 @@ class Fetcher(object):
             result['content'] = response.body or ''  # type: bytes. http://www.tornadoweb.org/en/stable/httpclient.html#response-objects
             result['headers'] = dict(response.headers)
             result['status_code'] = response.code
-            result['url'] = response.effective_url or url
+            result['url'] = response.effective_url or url  # effective_url: final location of the resource after following any redirects
             result['time'] = time.time() - start_time
             result['cookies'] = session.get_dict()
             result['save'] = task_fetch.get('save')
